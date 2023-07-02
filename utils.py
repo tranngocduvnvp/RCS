@@ -12,9 +12,9 @@ def load_model(filename):
         model = pickle.load(file)
     return model
 
-knn_model = load_model('/home/tran/recommeder_sys/RC/model/knn.pkl')
+knn_model = load_model('./model/knn.pkl')
 
-data_process = pd.read_csv('/home/tran/recommeder_sys/RC/data/data_processed.csv')
+data_process = pd.read_csv('./data/data_processed.csv')
 data_process = data_process.drop_duplicates(subset=["user_id"], keep='first', inplace=False)
 
 # Khai báo
@@ -51,8 +51,8 @@ tinhcach_arr = ['ENFJ-A', 'ENFJ-T', 'ENFP-A', 'ENFP-T', 'ENTJ-A', 'ENTJ-T',
 
 
 # Đọc dữ liệu
-df_uni_major = pd.read_excel('/home/tran/recommeder_sys/RC/data/Data_Uni.xlsx', sheet_name='Uni_major', dtype={'ID_major': str})
-df_uni = pd.read_excel('/home/tran/recommeder_sys/RC/data/Data_Uni.xlsx', sheet_name='UNI')
+df_uni_major = pd.read_excel('./data/Data_Uni.xlsx', sheet_name='Uni_major', dtype={'ID_major': str})
+df_uni = pd.read_excel('./data/Data_Uni.xlsx', sheet_name='UNI')
 
 
 def get_similar_major(major_id, pivot_norm, item_sim_df):

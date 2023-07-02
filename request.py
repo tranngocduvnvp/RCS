@@ -1,7 +1,7 @@
 import requests
 
 
-url = "http://127.0.0.1:8000/predict"
+url = "http://127.0.0.1:8080/predict"
 
 hovaten = input("Ho va ten:")
 hocluc = input("Hoc luc:")
@@ -33,25 +33,6 @@ while 1:
         break
 
 
-payload = {"info_person": info_person, "nv": nv}
-
-response = requests.post(url, json=payload)
-
-result = response.json()
-
-# print(result)
-
-data_list_proposal = []
-for i in range(len(result["Uni"])):
-    uni = result["Uni"][str(i)]
-    major = result["Major"][str(i)]
-    block = result["block"][str(i)]
-    data_list_proposal.append([uni, major, block])
-
-print(data_list_proposal)
-
-
-
 # info_person = {
 #     "hovaten": "tran ngoc du",
 #     "hocluc": "Giỏi",
@@ -79,3 +60,25 @@ print(data_list_proposal)
 #       "islike": "Rất thích"
 #     }
 # ]
+
+
+
+payload = {"info_person": info_person, "nv": nv}
+
+response = requests.post(url, json=payload)
+
+result = response.json()
+
+# print(result)
+
+data_list_proposal = []
+for i in range(len(result["Uni"])):
+    uni = result["Uni"][str(i)]
+    major = result["Major"][str(i)]
+    block = result["block"][str(i)]
+    data_list_proposal.append([uni, major, block])
+
+print(data_list_proposal)
+
+
+

@@ -10,7 +10,7 @@ warnings.filterwarnings('ignore')
 
 from utils import *
 
-df = pd.read_csv('/home/tran/recommeder_sys/RC/data/data_processed.csv')
+df = pd.read_csv('./data/data_processed.csv')
 
 
 
@@ -32,7 +32,7 @@ def get_final_list_major(holuc, tinhcach, list_nv, n_output = 5):
     else:
         df = pd.concat([df_1[['major_id','Uni', 'Major']], df_2])
     df_result = block_recoment(df, list_nv)[['Uni', 'Major', 'block']]
-    df_result.to_excel('/home/tran/recommeder_sys/RC/result/result_recoment.xlsx', index = False)
+    df_result.to_excel('./result/result_recoment.xlsx', index = False)
     return df_result
 
 
