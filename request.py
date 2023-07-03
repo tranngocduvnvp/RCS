@@ -3,63 +3,63 @@ import requests
 
 url = "http://127.0.0.1:8080/predict"
 
-hovaten = input("Ho va ten:")
-hocluc = input("Hoc luc:")
-tinhcach = input("Tinh cach:")
-
-
-info_person = {
-    "hovaten": hovaten,
-    "hocluc": hocluc,
-    "tinhcach": tinhcach
-}
-
-print("======== Nhap danh sach nguyen vong: ==================")
-nv = []
-while 1:
-    uni = input("Uni:")
-    major = input("Major:")
-    block = input("Block:")
-    islike = input("Islike:")
-
-    nv.append({
-        "uni": uni,
-        "major": major,
-        "block": block,
-        "islike": islike
-    })
-    check = input("Check again? (y/n):")
-    if check == "n":
-        break
+# hovaten = input("Ho va ten:")
+# hocluc = input("Hoc luc:")
+# tinhcach = input("Tinh cach:")
 
 
 # info_person = {
-#     "hovaten": "tran ngoc du",
-#     "hocluc": "Giỏi",
-#     "tinhcach": "ENFJ-A"
+#     "hovaten": hovaten,
+#     "hocluc": hocluc,
+#     "tinhcach": tinhcach
 # }
 
+# print("======== Nhap danh sach nguyen vong: ==================")
+# nv = []
+# while 1:
+#     uni = input("Uni:")
+#     major = input("Major:")
+#     block = input("Block:")
+#     islike = input("Islike:")
 
-# nv = [
-#     {
-#       "uni": "Học viện Âm nhạc Quốc gia Việt Nam",
-#       "major": "Âm nhạc học",
-#       "block": "N",
-#       "islike": "Rất thích"
-#     },
-#     {
-#       "uni": "Học viện Báo chí và Tuyên truyền",
-#       "major": "Chính trị phát triển",
-#       "block": "A16",
-#       "islike": "Thích"
-#     },
-#     {
-#       "uni": "Đại học Bách khoa Hà Nội",
-#       "major": "Toán - Tin",
-#       "block": "A00",
-#       "islike": "Rất thích"
-#     }
-# ]
+#     nv.append({
+#         "uni": uni,
+#         "major": major,
+#         "block": block,
+#         "islike": islike
+#     })
+#     check = input("Check again? (y/n):")
+#     if check == "n":
+#         break
+
+
+info_person = {
+    "hovaten": "tran ngoc du",
+    "hocluc": "Giỏi",
+    "tinhcach": "ENFJ-A"
+}
+
+
+nv = [
+    {
+      "uni": "Học viện Âm nhạc Quốc gia Việt Nam",
+      "major": "Âm nhạc học",
+      "block": "N",
+      "islike": "Rất thích"
+    },
+    {
+      "uni": "Học viện Báo chí và Tuyên truyền",
+      "major": "Chính trị phát triển",
+      "block": "A16",
+      "islike": "Thích"
+    },
+    {
+      "uni": "Đại học Bách khoa Hà Nội",
+      "major": "Toán - Tin",
+      "block": "A00",
+      "islike": "Rất thích"
+    }
+]
 
 
 

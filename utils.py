@@ -59,7 +59,8 @@ def get_similar_major(major_id, pivot_norm, item_sim_df):
     try:
         index_major_id = major_id_arr.index(str(major_id))
     except:
-        print("Không tìm thấy mã ngành trong danh sách tham chiếu")
+        # print("Không tìm thấy mã ngành trong danh sách tham chiếu")
+        pass
     if index_major_id not in pivot_norm.index:
         return None, None
     else:
@@ -71,9 +72,13 @@ def get_similar_major(major_id, pivot_norm, item_sim_df):
 
 def convert_major_index_2_uni_major(major_index):
     major_id = major_id_arr[major_index]
-    major = df_uni_major.loc[df_uni_major['ID_major'] == major_id]['Major'].values[0]
-    
-    uni_id = df_uni_major.loc[df_uni_major['ID_major'] == major_id]['ID_uni'].values[0]
+    if major_id == "-1":
+        return None, None
+    try:
+        major = df_uni_major.loc[df_uni_major['ID_major'] == major_id]['Major'].values[0]
+        uni_id = df_uni_major.loc[df_uni_major['ID_major'] == major_id]['ID_uni'].values[0]
+    except:
+        pass
 
     uni = df_uni.loc[df_uni['ID'] == uni_id]['Uni'].values[0]
 
@@ -101,13 +106,16 @@ def get_similar_list_major(list_major_id, pivot_norm, item_sim_df):
         for i in range(0, len(sim_score)):
             if sim_score[i] > 0:
                 uni, major = convert_major_index_2_uni_major(sim_major[i])
+                if uni == None:
+                    continue
                 result = {
                     'major_id': major_id,
                     'Uni': uni,
                     'Major': major,
-                    'score': sim_score[i]
+                    'score': f"{sim_score[i]:.5f} (c)", #sim_score[i]
                 }
                 result_all.append(result)
+    result_all = result_all[:5]
     df_result_all = pd.DataFrame(result_all)
     # print(df_result_all)
     # df_final = pd.DataFrame(df_result_all.groupby(['Uni', 'Major'])['score'].sum())
@@ -127,36 +135,48 @@ def check_major_id(arr_nv):
 def check_list_major_id(list_arr_nv):
     list_id_major = []
     for arr_nv in list_arr_nv:
-        id_major = check_major_id(arr_nv)
-        list_id_major.append(id_major)
+        try:
+            id_major = check_major_id(arr_nv)
+            list_id_major.append(id_major)
+        except:
+            # print("Không tìm thấy mã ngành trong danh sách tham chiếu")
+            pass
     
     return list_id_major
 
 
 def knn_recoment(n, holuc, tinhcach):
     result_all = []
+    count = 1
     hocluc_index = hocluc_arr.index(holuc)
     tinhcach_index = tinhcach_arr.index(tinhcach)
     x = [[hocluc_index, tinhcach_index]]
     distances, indices = knn_model.kneighbors(x)
+    # print("distances:",distances)
     # indices_in = indices[indices < len(major_id_arr)]
     indices_in = indices[0]
     try:
-        list_major_id_encode = list(indices_in[0:n])
+        list_major_id_encode = list(indices_in[0:-1]) #danh sach nhung nguoi gan nhat
         list_major_id_encode = [data_process.iloc[idx]["major_id_encode"] \
                                 for idx in list_major_id_encode]
 
     except:
         list_major_id_encode = indices_in
     for major_id_encode in list_major_id_encode:
+        if count > n:
+            break
         uni, major = convert_major_index_2_uni_major(major_id_encode)
+        if uni == None:
+            continue
         major_id = major_id_arr[major_id_encode]
         result = {
             'major_id': major_id,
             'Uni': uni,
-            'Major': major
+            'Major': major,
+            'score': f"{distances[0][count-1]:.5f} (d)"
         }
         result_all.append(result)
+        count +=1
     df_result_all = pd.DataFrame(result_all)
     return df_result_all
         
@@ -169,19 +189,21 @@ def block_recoment(df, list_arr_nv):
 
     df['block'] = None
     for i in range(0, len(df)):
-        block_choise_in_uni = block_choise_arr[0]
+        block_choise_in_uni = block_choise_arr[0] #khoi trong nguyen vong ban dau
         block_list_uni = list(df_uni_major.loc[df_uni_major['ID_major'] == str(df['major_id'][i])]['Block'].values)
-        block_list_uni = block_list_uni[0].split(', ')
+        # print("block_list_uni:",block_list_uni)
+        # print(", df['major_id'][i]:",df['major_id'][i])
+        block_list_uni = block_list_uni[0].split(', ') #[D, C] khoi that di kem voiw nganh
         for block_choise in block_choise_arr:
             if block_choise in block_list_uni:
                 block_choise_in_uni = block_choise
                 break
             else:
+                block_choise_in_uni = block_list_uni[0]
                 continue
         df['block'][i] = block_choise_in_uni
     
     return df
-
 
 
 
@@ -214,11 +236,7 @@ if __name__ == '__main__':
 
     list_nv = [nv1, nv2, nv3]
 
-    # id_major = check_major_id(nv1)
-    # print(id_major)
-
-    # list_arr_nv = check_list_major_id(list_nv)
-    # print(list_arr_nv)
+   
 
     n = 5
     df_2 = knn_recoment(n, holuc, tinhcach)
